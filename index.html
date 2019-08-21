@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tetris</title>
+</head>
+<body>
+  <div class="well">
+    <div class="pause">Paused</div>
+  </div>
+  <div class="next"></div>
+  <div class="score"></div>
+  <ul>
+    <li><kbd class="key">&larr;</kbd> - move left</li>
+    <li><kbd class="key">&rarr;</kbd> - move right</li>
+    <li><kbd class="key">&uarr;</kbd> - rotate</li>
+    <li><kbd class="key">&darr;</kbd> - move down</li>
+    <li><kbd class="key">space</kbd> - pause</li>
+    <li><kbd class="key">Esc</kbd> - new game</li>
+  </ul>
+  <script src="rxjs.umd.min.js"></script>
+  <script src="game-logic.js"></script>
+  <script src="render.js"></script>
+  <script src="game-loop.js"></script>
+</body>
+</html>
