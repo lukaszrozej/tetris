@@ -5,21 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Tetris</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>TETRIS</header>
   <div class="well">
     <div class="pause">Paused</div>
   </div>
-  <div class="next"></div>
-  <div class="score"></div>
-  <ul>
-    <li><kbd class="key">&larr;</kbd> - move left</li>
-    <li><kbd class="key">&rarr;</kbd> - move right</li>
-    <li><kbd class="key">&uarr;</kbd> - rotate</li>
-    <li><kbd class="key">&darr;</kbd> - move down</li>
-    <li><kbd class="key">space</kbd> - pause</li>
-    <li><kbd class="key">Esc</kbd> - new game</li>
-  </ul>
+  <div class="info">
+    <div class="next"></div>
+    <div class="score"></div>
+    <ul class="keyboard">
+      <li><kbd class="key">&larr;</kbd><span class="action"> - move left</span></li>
+      <li><kbd class="key">&rarr;</kbd><span class="action"> - move right</span></li>
+      <li><kbd class="key">&uarr;</kbd><span class="action"> - rotate</span></li>
+      <li><kbd class="key">&darr;</kbd><span class="action"> - move down</span></li>
+      <li><kbd class="key">space</kbd><span class="action"> - pause</span></li>
+      <li><kbd class="key">Esc</kbd><span class="action"> - new game</span></li>
+    </ul>
+  </div>
+  <footer>Made by Łukasz Rożej</footer>
   <script src="rxjs.umd.min.js"></script>
   <script src="game-logic.js"></script>
   <script src="render.js"></script>

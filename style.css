@@ -2,3 +2,83 @@
   margin: 0;
   padding: 0;
 }
+
+:root {
+  --well-rows: 20;
+  --well-columns: 10;
+  --well-height: 80vmin;
+  --cell-size: calc(var(--well-height) / var(--well-rows));
+  --well-width: calc(var(--well-columns) * var(--cell-size));
+}
+
+body {
+  color: white;
+  background: #333838;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+header,
+footer {
+  width: 100vw;
+  height: calc(50vh - var(--well-width));
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.well,
+.next,
+.score,
+.keyboard {
+  background: black;
+}
+
+.well {
+  width: var(--well-width);
+  height: calc( 2 * var(--well-width));
+}
+
+.well,
+.info {
+  margin: 0 1vw;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.next {
+  width: calc(6 * var(--cell-size));
+  height: calc(4 * var(--cell-size));
+}
+
+.keyboard {
+  font-size: 2vmin;
+}
+
+li {
+  display: flex;
+}
+
+.key {
+  flex: 1;
+  text-align: center;
+}
+
+.action {
+  flex: 2;
+}
+
+.pause {
+  display: none;
+}
