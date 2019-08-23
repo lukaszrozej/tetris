@@ -1,14 +1,16 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
   --well-rows: 20;
   --well-columns: 10;
   --well-height: 80vmin;
-  --cell-size: calc(var(--well-height) / var(--well-rows));
-  --well-width: calc(var(--well-columns) * var(--cell-size));
+  --square-size: calc(var(--well-height) / var(--well-rows));
+  --square-border-width: calc(var(--square-size) / 8);
+  --well-width: calc(var(--well-columns) * var(--square-size));
 }
 
 body {
@@ -44,6 +46,7 @@ footer {
 .well {
   width: var(--well-width);
   height: calc( 2 * var(--well-width));
+  position: relative;
 }
 
 .well,
@@ -58,8 +61,8 @@ footer {
 }
 
 .next {
-  width: calc(6 * var(--cell-size));
-  height: calc(4 * var(--cell-size));
+  width: calc(6 * var(--square-size));
+  height: calc(4 * var(--square-size));
 }
 
 .keyboard {
@@ -82,3 +85,24 @@ li {
 .pause {
   display: none;
 }
+
+/* SQUARES */
+
+.square {
+  width: var(--square-size);
+  height: var(--square-size);
+  position: absolute;
+
+  border-top: var(--square-border-width) rgba(255, 255, 255, 0.6) solid;
+  border-left: var(--square-border-width) rgba(255, 255, 255, 0.3) solid;
+  border-bottom: var(--square-border-width) rgba(0, 0, 0, 0.6) solid;
+  border-right: var(--square-border-width) rgba(0, 0, 0, 0.3) solid;
+}
+
+.I { background: red; }
+.o { background: green; }
+.T { background: lightblue; }
+.S { background: pink; }
+.Z { background: violet; }
+.L { background: yellow; }
+.J { background: orange; }
