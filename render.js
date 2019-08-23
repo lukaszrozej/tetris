@@ -24,4 +24,4 @@ const renderTetronimo = tetronimo => {
   tetronimo.squares.forEach(renderSquare(tetronimo.type))
 }
 
-renderTetronimo(rndTetronimo())
+var t = rndTetronimo()
