@@ -7,7 +7,7 @@ root.style.setProperty('--well-columns', width)
 
 let id = 0
 
-const tetronimos = [
+const tetrominos = [
   {
     type: 'I',
     axis: { x: 1.5, y: -0.5 },
@@ -82,11 +82,11 @@ const tetronimos = [
 
 const pickRandom = array => array[Math.floor(Math.random() * array.length)]
 
-const rndTetronimo = () => {
-  // const tetronimo = pickRandom(tetronimos)
-  const tetronimo = tetronimos[6]
-  const squares = tetronimo.squares.map(p => ({ ...p, id: id++ }))
-  return { ...tetronimo, ...{ squares } }
+const rndTetromino = () => {
+  // const tetromino = pickRandom(tetrominos)
+  const tetromino = tetrominos[2]
+  const squares = tetromino.squares.map(p => ({ ...p, id: id++ }))
+  return { ...tetromino, ...{ squares } }
 }
 
 const add = p1 => p2 => ({
@@ -107,11 +107,11 @@ const down = { x: 0, y: 1 }
 
 const moveSquare = vector => square => ({ ...square, ...add(square)(vector) })
 
-const move = vector => tetronimo => {
-  const squares = tetronimo.squares.map(moveSquare(vector))
-  const axis = add(tetronimo.axis)(vector)
+const move = vector => tetromino => {
+  const squares = tetromino.squares.map(moveSquare(vector))
+  const axis = add(tetromino.axis)(vector)
   return {
-    type: tetronimo.type,
+    type: tetromino.type,
     axis,
     squares
   }
@@ -127,10 +127,48 @@ const rotatePoint = axis => pipe(
 
 const rotateSquare = axis => square => ({ ...square, ...rotatePoint(axis)(square) })
 
-const rotate = tetronimo => {
-  const squares = tetronimo.squares.map(rotateSquare(tetronimo.axis))
+const rotate = tetromino => {
+  const squares = tetromino.squares.map(rotateSquare(tetromino.axis))
   return {
-    ...tetronimo,
+    ...tetromino,
     squares
   }
 }
+
+const emptyRows = Array(height).fill(
+  Array(width).fill(undefined)
+)
+
+const notEmpty = square => square !== undefined
+
+const equal = p1 => p2 =>
+  p1.x === p2.x &&
+  p1.y === p2.y
+
+const mount = tetronimo => rows =>
+  rows.map((row, y) =>
+    row.map((square, x) =>
+      tetronimo.squares.find(equal({ x, y })) || square
+    )
+  )
+
+const outOfBounds = p =>
+  p.x < 0 ||
+  p.x >= width ||
+  p.y < 0 ||
+  p.y >= height
+
+const push = vector => state => {
+  const tetromino = move(vector)(state.tetromino)
+  if (tetromino.squares.some(outOfBounds)) return state
+  return {
+    ...state,
+    tetromino
+  }
+}
+
+const initialState = {
+  tetromino: rndTetromino()
+}
+
+const nextState = (state, action) => action(state)
