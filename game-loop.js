@@ -4,7 +4,7 @@ const { filter, map, scan, startWith, switchMap } = rxjs.operators
 const keyMapping = {
   37: push(left),
   39: push(right),
-  40: push(down)
+  40: drop
 }
 
 const keyboardActions = fromEvent(document, 'keydown').pipe(

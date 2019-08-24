@@ -152,23 +152,44 @@ const mount = tetronimo => rows =>
     )
   )
 
-const outOfBounds = p =>
-  p.x < 0 ||
-  p.x >= width ||
-  p.y < 0 ||
-  p.y >= height
+const inBounds = p =>
+  p.x >= 0 &&
+  p.x < width &&
+  p.y < height
+
+const collision = rows => tetromino =>
+  rows.some((row, y) =>
+    row.some((square, x) =>
+      notEmpty(square) &&
+      tetromino.squares.some(equal({ x, y }))
+    )
+  )
+
+const valid = rows => tetromino =>
+  tetromino.squares.every(inBounds) &&
+  !collision(rows)(tetromino)
 
 const push = vector => state => {
   const tetromino = move(vector)(state.tetromino)
-  if (tetromino.squares.some(outOfBounds)) return state
+  if (valid(state.rows)(tetromino)) return { ...state, tetromino }
+
+  return state
+}
+
+const drop = state => {
+  const tetromino = move(down)(state.tetromino)
+  if (valid(state.rows)(tetromino)) return { ...state, tetromino }
+
   return {
     ...state,
-    tetromino
+    rows: mount(state.tetromino)(state.rows),
+    tetromino: rndTetromino()
   }
 }
 
 const initialState = {
-  tetromino: rndTetromino()
+  tetromino: rndTetromino(),
+  rows: emptyRows
 }
 
 const nextState = (state, action) => action(state)

@@ -39,6 +39,7 @@ const renderRows = rows => {
 
 const render = state => {
   if (state.tetromino) renderTetromino(state.tetromino)
+  renderRows(state.rows)
 }
 
 // var t = rndTetromino()
