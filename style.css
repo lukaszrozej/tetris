@@ -61,8 +61,11 @@ footer {
 }
 
 .next {
+  border-left: var(--square-size) solid black;
+  border-top: var(--square-size) solid black;
   width: calc(6 * var(--square-size));
   height: calc(4 * var(--square-size));
+  position: relative;
 }
 
 .keyboard {

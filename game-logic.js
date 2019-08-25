@@ -83,8 +83,8 @@ const tetrominos = [
 const pickRandom = array => array[Math.floor(Math.random() * array.length)]
 
 const rndTetromino = () => {
-  // const tetromino = pickRandom(tetrominos)
-  const tetromino = tetrominos[2]
+  const tetromino = pickRandom(tetrominos)
+  // const tetromino = tetrominos[6]
   const squares = tetromino.squares.map(p => ({ ...p, id: id++ }))
   return { ...tetromino, ...{ squares } }
 }
@@ -176,6 +176,11 @@ const push = vector => state => {
   return state
 }
 
+const wellCenter = {
+  x: width >> 2 - 1,
+  y: 0
+}
+
 const drop = state => {
   const tetromino = move(down)(state.tetromino)
   if (valid(state.rows)(tetromino)) return { ...state, tetromino }
@@ -183,12 +188,24 @@ const drop = state => {
   return {
     ...state,
     rows: mount(state.tetromino)(state.rows),
-    tetromino: rndTetromino()
+    tetromino: move(wellCenter)(state.next),
+    next: rndTetromino()
   }
+}
+
+const turn = state => {
+  console.log('bla')
+  console.log(state.tetromino.squares)
+  const tetromino = rotate(state.tetromino)
+  console.log(tetromino.squares)
+  if (valid(state.rows)(tetromino)) return { ...state, tetromino }
+
+  return state
 }
 
 const initialState = {
   tetromino: rndTetromino(),
+  next: rndTetromino(),
   rows: emptyRows
 }
 

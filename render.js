@@ -1,4 +1,5 @@
 const well = document.querySelector('.well')
+const next = document.querySelector('.next')
 const squareElems = {}
 
 const setPosition = squareElem => p => {
@@ -11,13 +12,13 @@ const createSquareElem = (type, id) => {
   squareElem.classList.add('square')
   squareElem.classList.add(type)
   squareElems[id] = squareElem
-  well.appendChild(squareElem)
   return squareElem
 }
 
-const renderTetromino = tetromino => {
+const renderTetromino = parent => tetromino => {
   tetromino.squares.forEach(square => {
     const squareElem = squareElems[square.id] || createSquareElem(tetromino.type, square.id)
+    parent.appendChild(squareElem)
     setPosition(squareElem)(square)
   })
 }
@@ -38,7 +39,8 @@ const renderRows = rows => {
 }
 
 const render = state => {
-  if (state.tetromino) renderTetromino(state.tetromino)
+  if (state.tetromino) renderTetromino(well)(state.tetromino)
+  renderTetromino(next)(state.next)
   renderRows(state.rows)
 }
 

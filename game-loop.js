@@ -3,6 +3,7 @@ const { filter, map, scan, startWith, switchMap } = rxjs.operators
 
 const keyMapping = {
   37: push(left),
+  38: turn,
   39: push(right),
   40: drop
 }
