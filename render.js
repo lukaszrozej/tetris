@@ -1,5 +1,6 @@
 const well = document.querySelector('.well')
 const next = document.querySelector('.next')
+const scoreElem = document.querySelector('.score')
 const squareElems = {}
 
 const setPosition = squareElem => p => {
@@ -55,6 +56,10 @@ const removeFull = () => {
   })
 }
 
+const renderScore = score => {
+  scoreElem.textContent = score
+}
+
 const render = state => {
   if (state.tetromino) {
     renderTetromino(well)(state.tetromino)
@@ -69,6 +74,7 @@ const render = state => {
   }
   renderTetromino(next)(state.next)
   renderRows(state.rows)
+  renderScore(state.score)
 }
 
 // var t = rndTetromino()
