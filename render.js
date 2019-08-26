@@ -61,15 +61,11 @@ const render = state => {
     removeFull()
   } else {
     const squareIds = ids(state)
-    console.log(squareIds)
-    console.log(Object.entries(squareElems))
     Object.entries(squareElems).forEach(([id, squareElem]) => {
       if (!(squareIds.includes(parseInt(id)))) {
         squareElem.classList.add('full')
       }
     })
-    console.log(state.rows)
-    // debugger
   }
   renderTetromino(next)(state.next)
   renderRows(state.rows)

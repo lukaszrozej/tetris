@@ -104,6 +104,11 @@ const pipe = (...fs) => x => fs.reduce((y, f) => f(y), x)
 const right = { x: 1, y: 0 }
 const left = { x: -1, y: 0 }
 const down = { x: 0, y: 1 }
+const right2 = { x: 2, y: 0 }
+const left2 = { x: -2, y: 0 }
+const zero = { x: 0, y: 0 }
+
+const possibleShifts = [zero, left, right, left2, right2]
 
 const moveSquare = vector => square => ({ ...square, ...add(square)(vector) })
 
@@ -190,6 +195,23 @@ const notFull = row =>
 const clearFullRows = rows =>
   rows.filter(notFull)
 
+// Levels:
+// - Start with 1
+// - increase every 10 lines
+// Scoring:
+// Single	100 × level
+// Double	300 × level
+// Triple	500 × level
+// Tetris	800 × level; difficult
+// Combo	50 × combo count × level
+
+const linesScoring = {
+  1: 100,
+  2: 300,
+  3: 500,
+  4: 800
+}
+
 const drop = state => {
   if (!state.tetromino) return {
     ...state,
@@ -208,15 +230,30 @@ const drop = state => {
       ...state,
       rows: mountedRows,
       tetromino: move(wellCenter)(state.next),
-      next: rndTetromino()
+      next: rndTetromino(),
+      comboCount: 0
     }
   }
+// debugger
+  const level = Math.floor(state.linesCount / 10) + 1
+
+  const currentLinesCount = height - clearedRows.length
+  const linesScore = linesScoring[currentLinesCount] * level
+
+  const comboScore = 50 * state.comboCount * level
+
+  const score = state.score + linesScore + comboScore
+  const comboCount = state.comboCount + 1
+  const linesCount = state.linesCount + currentLinesCount
 
   const rows = Array(height - clearedRows.length).fill(emptyRow).concat(clearedRows)
   return {
     ...state,
     rows,
-    tetromino: undefined
+    tetromino: undefined,
+    score,
+    comboCount,
+    linesCount
   }
 }
 
@@ -224,7 +261,11 @@ const turn = state => {
   if (!state.tetromino) return state
 
   const tetromino = rotate(state.tetromino)
-  if (valid(state.rows)(tetromino)) return { ...state, tetromino }
+  
+  const validShift = possibleShifts.find(shift =>
+    valid(state.rows)(move(shift)(tetromino))
+  )
+  if (validShift) return { ...state, tetromino: move(validShift)(tetromino) }
 
   return state
 }
@@ -232,7 +273,10 @@ const turn = state => {
 const initialState = {
   tetromino: move(wellCenter)(rndTetromino()),
   next: rndTetromino(),
-  rows: emptyRows
+  rows: emptyRows,
+  score: 0,
+  linesCount: 0,
+  comboCount: 0
 }
 
 const nextState = (state, action) => action(state)
