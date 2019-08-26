@@ -84,7 +84,7 @@ const pickRandom = array => array[Math.floor(Math.random() * array.length)]
 
 const rndTetromino = () => {
   const tetromino = pickRandom(tetrominos)
-  // const tetromino = tetrominos[6]
+  // const tetromino = tetrominos[0]
   const squares = tetromino.squares.map(p => ({ ...p, id: id++ }))
   return { ...tetromino, ...{ squares } }
 }
@@ -135,10 +135,11 @@ const rotate = tetromino => {
   }
 }
 
-const emptyRows = Array(height).fill(
-  Array(width).fill(undefined)
-)
+const emptyRow = Array(width).fill(undefined)
 
+const emptyRows = Array(height).fill(emptyRow)
+
+const empty = square => square === undefined
 const notEmpty = square => square !== undefined
 
 const equal = p1 => p2 =>
@@ -170,6 +171,8 @@ const valid = rows => tetromino =>
   !collision(rows)(tetromino)
 
 const push = vector => state => {
+  if (!state.tetromino) return state
+
   const tetromino = move(vector)(state.tetromino)
   if (valid(state.rows)(tetromino)) return { ...state, tetromino }
 
@@ -181,30 +184,53 @@ const wellCenter = {
   y: 0
 }
 
+const notFull = row =>
+  row.some(empty)
+
+const clearFullRows = rows =>
+  rows.filter(notFull)
+
 const drop = state => {
+  if (!state.tetromino) return {
+    ...state,
+    tetromino: move(wellCenter)(state.next),
+    next: rndTetromino()
+  }
+
   const tetromino = move(down)(state.tetromino)
   if (valid(state.rows)(tetromino)) return { ...state, tetromino }
 
+  const mountedRows = mount(state.tetromino)(state.rows)
+  const clearedRows = clearFullRows(mountedRows)
+
+  if (clearedRows.length === height) {
+    return {
+      ...state,
+      rows: mountedRows,
+      tetromino: move(wellCenter)(state.next),
+      next: rndTetromino()
+    }
+  }
+
+  const rows = Array(height - clearedRows.length).fill(emptyRow).concat(clearedRows)
   return {
     ...state,
-    rows: mount(state.tetromino)(state.rows),
-    tetromino: move(wellCenter)(state.next),
-    next: rndTetromino()
+    rows,
+    tetromino: undefined
   }
 }
 
 const turn = state => {
-  console.log('bla')
-  console.log(state.tetromino.squares)
+  if (!state.tetromino) return state
+
   const tetromino = rotate(state.tetromino)
-  console.log(tetromino.squares)
   if (valid(state.rows)(tetromino)) return { ...state, tetromino }
 
   return state
 }
 
 const initialState = {
-  tetromino: rndTetromino(),
+  tetromino: move(wellCenter)(rndTetromino()),
   next: rndTetromino(),
   rows: emptyRows
 }

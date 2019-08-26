@@ -9,6 +9,7 @@ const setPosition = squareElem => p => {
 
 const createSquareElem = (type, id) => {
   const squareElem = document.createElement('div')
+  squareElem.textContent = id
   squareElem.classList.add('square')
   squareElem.classList.add(type)
   squareElems[id] = squareElem
@@ -25,21 +26,51 @@ const renderTetromino = parent => tetromino => {
 
 const renderRows = rows => {
   rows.forEach((row, y) => {
-    const rowIsFull = row.every(notEmpty)
     row.forEach((square, x) => {
       if (!square) return
 
       const squareElem = squareElems[square.id]
       squareElem.classList.add('row-square')
-      if (rowIsFull) squareElem.classList.add('full')
 
-      setPosition(squareElem, { x, y })
+      setPosition(squareElem)({ x, y })
     })
   })
 }
 
+const ids = state => [
+  ...state.rows.flatMap(row =>
+    row
+      .filter(notEmpty)
+      .map(square => square.id)
+  ),
+  ...state.next.squares.map(square => square.id)
+]
+
+const removeFull = () => {
+  Object.entries(squareElems).forEach(([id, squareElem]) => {
+    if (squareElem.classList.contains('full')) {
+      delete squareElems[id]
+      squareElem.remove()
+    }
+  })
+}
+
 const render = state => {
-  if (state.tetromino) renderTetromino(well)(state.tetromino)
+  if (state.tetromino) {
+    renderTetromino(well)(state.tetromino)
+    removeFull()
+  } else {
+    const squareIds = ids(state)
+    console.log(squareIds)
+    console.log(Object.entries(squareElems))
+    Object.entries(squareElems).forEach(([id, squareElem]) => {
+      if (!(squareIds.includes(parseInt(id)))) {
+        squareElem.classList.add('full')
+      }
+    })
+    console.log(state.rows)
+    // debugger
+  }
   renderTetromino(next)(state.next)
   renderRows(state.rows)
 }
