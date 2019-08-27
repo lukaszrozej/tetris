@@ -1,3 +1,10 @@
+const root = document.querySelector(':root')
+root.style.setProperty('--well-rows', height)
+root.style.setProperty('--well-columns', width)
+
+root.style.setProperty('--transition-left-time', `${minTime * width / (width + 4)}ms`)
+root.style.setProperty('--transition-down-time', `${minTime * 4 / (width + 4)}ms`)
+
 const well = document.querySelector('.well')
 const next = document.querySelector('.next')
 const scoreElem = document.querySelector('.score')

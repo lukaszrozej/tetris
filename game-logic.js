@@ -1,9 +1,9 @@
 const width = 10
 const height = 20
 
-const root = document.querySelector(':root')
-root.style.setProperty('--well-rows', height)
-root.style.setProperty('--well-columns', width)
+const maxTime = 1000
+const minTime = 200
+const timeFactor = 0.75
 
 let id = 0
 
