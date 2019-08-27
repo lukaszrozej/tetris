@@ -69,6 +69,17 @@ footer {
   position: relative;
 }
 
+.score-container {
+  font-size: var(--square-size);
+
+  height: calc(4 * var(--square-size));
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .keyboard {
   font-size: 2vmin;
 }
