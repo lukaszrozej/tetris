@@ -176,7 +176,7 @@ const valid = rows => tetromino =>
   !collision(rows)(tetromino)
 
 const push = vector => state => {
-  if (!state.tetromino) return state
+  if (!state.tetromino || state.paused) return state
 
   const tetromino = move(vector)(state.tetromino)
   if (valid(state.rows)(tetromino)) return { ...state, tetromino }
@@ -213,7 +213,7 @@ const linesScoring = {
 }
 
 const drop = state => {
-  if (!state.tetromino) return state
+  if (!state.tetromino || state.paused) return state
 
   const tetromino = move(down)(state.tetromino)
   if (valid(state.rows)(tetromino)) return { ...state, tetromino }
@@ -254,7 +254,7 @@ const drop = state => {
 }
 
 const turn = state => {
-  if (!state.tetromino) return state
+  if (!state.tetromino || state.paused) return state
 
   const tetromino = rotate(state.tetromino)
   
@@ -274,10 +274,13 @@ const newGame = () => ({
   linesCount: 0,
   comboCount: 0,
   timeOfLastTick: 0,
-  timeBetweenTicks: maxTime
+  timeBetweenTicks: maxTime,
+  paused: false
 })
 
 const tick = time => state => {
+  if (state.paused) return state
+
   const dt = time - state.timeOfLastTick
   if (dt < state.timeBetweenTicks) return state
 
@@ -297,6 +300,9 @@ const tick = time => state => {
   }
 }
 
-// TODO: pause action
+const togglePause = state => ({
+  ...state,
+  paused: !state.paused
+})
 
 const nextState = (state, action) => action(state)

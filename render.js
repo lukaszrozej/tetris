@@ -8,6 +8,7 @@ root.style.setProperty('--transition-down-time', `${minTime * 4 / (width + 4)}ms
 const well = document.querySelector('.well')
 const next = document.querySelector('.next')
 const scoreElem = document.querySelector('.score')
+const pauseElem = document.querySelector('.pause')
 const squareElems = {}
 
 const setPosition = squareElem => p => {
@@ -27,7 +28,8 @@ const createSquareElem = (type, id) => {
 const renderTetromino = parent => tetromino => {
   tetromino.squares.forEach(square => {
     const squareElem = squareElems[square.id] || createSquareElem(tetromino.type, square.id)
-    parent.appendChild(squareElem)
+    // parent.appendChild(squareElem)
+    parent.prepend(squareElem)
     setPosition(squareElem)(square)
   })
 }
@@ -73,6 +75,11 @@ const renderScore = score => {
   scoreElem.textContent = score
 }
 
+const renderPause = state =>
+  state.paused
+    ? pauseElem.classList.add('show')
+    : pauseElem.classList.remove('show')
+
 const render = state => {
   if (state.tetromino) {
     renderTetromino(well)(state.tetromino)
@@ -88,6 +95,8 @@ const render = state => {
   renderTetromino(next)(state.next)
   renderRows(state.rows)
   renderScore(state.score)
+
+  renderPause(state)
 }
 
 // var t = rndTetromino()

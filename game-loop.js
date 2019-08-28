@@ -2,6 +2,7 @@ const { fromEvent, merge, animationFrame, interval } = rxjs
 const { filter, map, scan, startWith, distinct } = rxjs.operators
 
 const keyMapping = {
+  32: togglePause,
   27: newGame,
   37: push(left),
   38: turn,
