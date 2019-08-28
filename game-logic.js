@@ -283,6 +283,7 @@ const tick = time => state => {
 
   const timeOfLastTick = time
 
+  // TODO: check if game over
   if (!state.tetromino) return {
     ...state,
     tetromino: move(wellCenter)(state.next),
@@ -295,5 +296,7 @@ const tick = time => state => {
     timeOfLastTick
   }
 }
+
+// TODO: pause action
 
 const nextState = (state, action) => action(state)

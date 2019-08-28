@@ -1,5 +1,5 @@
 const { fromEvent, merge, animationFrame, interval } = rxjs
-const { filter, map, scan, startWith } = rxjs.operators
+const { filter, map, scan, startWith, distinct } = rxjs.operators
 
 const keyMapping = {
   27: newGame,
@@ -24,7 +24,8 @@ const initialState = newGame()
 
 gameStates = actions.pipe(
   scan(nextState, initialState),
-  startWith(initialState)
+  startWith(initialState),
+  distinct()
 )
 
 gameStates.forEach(render)
