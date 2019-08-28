@@ -51,12 +51,18 @@ const ids = state => [
       .filter(notEmpty)
       .map(square => square.id)
   ),
-  ...state.next.squares.map(square => square.id)
+  ...state.next.squares.map(square => square.id),
+  ...(
+    state.tetromino
+      ? state.tetromino.squares.map(square => square.id)
+      : []
+  )
 ]
 
-const removeFull = () => {
+const clearSquareElems = state => {
+  const squareIds = ids(state)
   Object.entries(squareElems).forEach(([id, squareElem]) => {
-    if (squareElem.classList.contains('full')) {
+    if (!(squareIds.includes(parseInt(id)))) {
       delete squareElems[id]
       squareElem.remove()
     }
@@ -70,7 +76,7 @@ const renderScore = score => {
 const render = state => {
   if (state.tetromino) {
     renderTetromino(well)(state.tetromino)
-    removeFull()
+    clearSquareElems(state)
   } else {
     const squareIds = ids(state)
     Object.entries(squareElems).forEach(([id, squareElem]) => {

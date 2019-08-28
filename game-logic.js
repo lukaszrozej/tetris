@@ -270,13 +270,13 @@ const turn = state => {
   return state
 }
 
-const initialState = {
+const newGame = () => ({
   tetromino: move(wellCenter)(rndTetromino()),
   next: rndTetromino(),
   rows: emptyRows,
   score: 0,
   linesCount: 0,
   comboCount: 0
-}
+})
 
 const nextState = (state, action) => action(state)

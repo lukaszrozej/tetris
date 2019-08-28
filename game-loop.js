@@ -2,6 +2,7 @@ const { fromEvent, merge } = rxjs
 const { filter, map, scan, startWith, switchMap } = rxjs.operators
 
 const keyMapping = {
+  27: newGame,
   37: push(left),
   38: turn,
   39: push(right),
@@ -14,6 +15,8 @@ const keyboardActions = fromEvent(document, 'keydown').pipe(
 )
 
 const actions = keyboardActions
+
+const initialState = newGame()
 
 gameStates = actions.pipe(
   scan(nextState, initialState),
