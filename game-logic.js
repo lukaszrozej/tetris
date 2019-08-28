@@ -185,7 +185,7 @@ const push = vector => state => {
 }
 
 const wellCenter = {
-  x: width >> 2 - 1,
+  x: (width >> 1) - 2,
   y: 0
 }
 
@@ -213,11 +213,7 @@ const linesScoring = {
 }
 
 const drop = state => {
-  if (!state.tetromino) return {
-    ...state,
-    tetromino: move(wellCenter)(state.next),
-    next: rndTetromino()
-  }
+  if (!state.tetromino) return state
 
   const tetromino = move(down)(state.tetromino)
   if (valid(state.rows)(tetromino)) return { ...state, tetromino }
@@ -286,6 +282,14 @@ const tick = time => state => {
   if (dt < state.timeBetweenTicks) return state
 
   const timeOfLastTick = time
+
+  if (!state.tetromino) return {
+    ...state,
+    tetromino: move(wellCenter)(state.next),
+    next: rndTetromino(),
+    timeOfLastTick
+  }
+
   return {
     ...drop(state),
     timeOfLastTick
