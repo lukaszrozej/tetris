@@ -1,5 +1,5 @@
-const { fromEvent, merge } = rxjs
-const { filter, map, scan, startWith, switchMap } = rxjs.operators
+const { fromEvent, merge, animationFrame, interval } = rxjs
+const { filter, map, scan, startWith } = rxjs.operators
 
 const keyMapping = {
   27: newGame,
@@ -14,7 +14,11 @@ const keyboardActions = fromEvent(document, 'keydown').pipe(
   map(e => keyMapping[e.keyCode])
 )
 
-const actions = keyboardActions
+const timeActions = interval(0, animationFrame).pipe(
+  map(() => tick(Date.now()))
+)
+
+const actions = merge(keyboardActions, timeActions)
 
 const initialState = newGame()
 

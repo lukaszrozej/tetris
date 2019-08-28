@@ -276,7 +276,20 @@ const newGame = () => ({
   rows: emptyRows,
   score: 0,
   linesCount: 0,
-  comboCount: 0
+  comboCount: 0,
+  timeOfLastTick: 0,
+  timeBetweenTicks: maxTime
 })
+
+const tick = time => state => {
+  const dt = time - state.timeOfLastTick
+  if (dt < state.timeBetweenTicks) return state
+
+  const timeOfLastTick = time
+  return {
+    ...drop(state),
+    timeOfLastTick
+  }
+}
 
 const nextState = (state, action) => action(state)
