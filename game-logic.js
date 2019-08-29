@@ -195,16 +195,6 @@ const notFull = row =>
 const clearFullRows = rows =>
   rows.filter(notFull)
 
-// Levels:
-// - Start with 1
-// - increase every 10 lines
-// Scoring:
-// Single	100 × level
-// Double	300 × level
-// Triple	500 × level
-// Tetris	800 × level; difficult
-// Combo	50 × combo count × level
-
 const linesScoring = {
   1: 100,
   2: 300,
@@ -230,7 +220,7 @@ const drop = state => {
       comboCount: 0
     }
   }
-// debugger
+
   const level = Math.floor(state.linesCount / 10) + 1
 
   const currentLinesCount = height - clearedRows.length

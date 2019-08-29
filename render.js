@@ -98,6 +98,3 @@ const render = state => {
 
   renderPause(state)
 }
-
-// var t = rndTetromino()
-// var r = emptyRows
