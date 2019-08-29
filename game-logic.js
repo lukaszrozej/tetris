@@ -202,8 +202,18 @@ const linesScoring = {
   4: 800
 }
 
+const checkGameOver = state =>
+  valid(state.rows)(state.tetromino)
+    ? state
+    : {
+      ...state,
+      tetromino: undefined,
+      next: rndTetromino(),
+      gameOver: true
+    }
+
 const drop = state => {
-  if (!state.tetromino || state.paused) return state
+  if (!state.tetromino || state.paused || state.gameOver) return state
 
   const tetromino = move(down)(state.tetromino)
   if (valid(state.rows)(tetromino)) return { ...state, tetromino }
@@ -212,13 +222,13 @@ const drop = state => {
   const clearedRows = clearFullRows(mountedRows)
 
   if (clearedRows.length === height) {
-    return {
+    return checkGameOver({
       ...state,
       rows: mountedRows,
       tetromino: move(wellCenter)(state.next),
       next: rndTetromino(),
       comboCount: 0
-    }
+    })
   }
 
   const level = Math.floor(state.linesCount / 10) + 1
@@ -244,7 +254,7 @@ const drop = state => {
 }
 
 const turn = state => {
-  if (!state.tetromino || state.paused) return state
+  if (!state.tetromino || state.paused || state.gameOver) return state
 
   const tetromino = rotate(state.tetromino)
   
@@ -265,11 +275,12 @@ const newGame = () => ({
   comboCount: 0,
   timeOfLastTick: 0,
   timeBetweenTicks: maxTime,
-  paused: false
+  paused: false,
+  gameOver: false
 })
 
 const tick = time => state => {
-  if (state.paused) return state
+  if (state.paused || state.gameOver) return state
 
   const dt = time - state.timeOfLastTick
   if (dt < state.timeBetweenTicks) return state
@@ -277,11 +288,15 @@ const tick = time => state => {
   const timeOfLastTick = time
 
   // TODO: check if game over
-  if (!state.tetromino) return {
-    ...state,
-    tetromino: move(wellCenter)(state.next),
-    next: rndTetromino(),
-    timeOfLastTick
+  if (!state.tetromino) {
+    const tetromino = move(wellCenter)(state.next)
+
+    return checkGameOver({
+      ...state,
+      tetromino,
+      next: rndTetromino(),
+      timeOfLastTick
+    })
   }
 
   return {
@@ -292,7 +307,7 @@ const tick = time => state => {
 
 const togglePause = state => ({
   ...state,
-  paused: !state.paused
+  paused: state.gameOver ? false : !state.paused
 })
 
 const nextState = (state, action) => action(state)

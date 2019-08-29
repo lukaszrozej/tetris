@@ -9,6 +9,7 @@ const well = document.querySelector('.well')
 const next = document.querySelector('.next')
 const scoreElem = document.querySelector('.score')
 const pauseElem = document.querySelector('.pause')
+const gameOverElem = document.querySelector('.game-over')
 const squareElems = {}
 
 const setPosition = squareElem => p => {
@@ -80,6 +81,11 @@ const renderPause = state =>
     ? pauseElem.classList.add('show')
     : pauseElem.classList.remove('show')
 
+const renderGameOver = state =>
+  state.gameOver
+    ? gameOverElem.classList.add('show')
+    : gameOverElem.classList.remove('show')
+
 const render = state => {
   if (state.tetromino) {
     renderTetromino(well)(state.tetromino)
@@ -95,6 +101,6 @@ const render = state => {
   renderTetromino(next)(state.next)
   renderRows(state.rows)
   renderScore(state.score)
-
   renderPause(state)
+  renderGameOver(state)
 }

@@ -44,13 +44,13 @@ footer {
 .score-container,
 .keyboard {
   background: black;
+  overflow: hidden;
 }
 
 .well {
   width: var(--well-width);
   height: calc( 2 * var(--well-width));
   position: relative;
-  overflow: hidden;
 }
 
 .well,
@@ -100,7 +100,8 @@ li {
   flex: 2;
 }
 
-.pause {
+.pause,
+.game-over {
   position: absolute;
   display: none;
   width: 100%;
@@ -130,7 +131,9 @@ li {
   border-left: var(--square-border-width) rgba(255, 255, 255, 0.3) solid;
   border-bottom: var(--square-border-width) rgba(0, 0, 0, 0.6) solid;
   border-right: var(--square-border-width) rgba(0, 0, 0, 0.3) solid;
+}
 
+.well .square {
   transition: all var(--transition-left-time), top var(--transition-down-time) var(--transition-left-time);
 }
 
