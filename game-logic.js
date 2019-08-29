@@ -3,7 +3,7 @@ const height = 20
 
 const maxTime = 1000
 const minTime = 200
-const timeFactor = 0.75
+const timeFactor = 0.85
 
 let id = 0
 
@@ -232,6 +232,9 @@ const drop = state => {
   }
 
   const level = Math.floor(state.linesCount / 10) + 1
+  const timeBetweenTicks = level > state.level
+    ? (state.timeBetweenTicks - minTime) * timeFactor
+    : state.timeBetweenTicks
 
   const currentLinesCount = height - clearedRows.length
   const linesScore = linesScoring[currentLinesCount] * level
@@ -249,7 +252,9 @@ const drop = state => {
     tetromino: undefined,
     score,
     comboCount,
-    linesCount
+    linesCount,
+    timeBetweenTicks,
+    level
   }
 }
 
@@ -276,7 +281,8 @@ const newGame = () => ({
   timeOfLastTick: 0,
   timeBetweenTicks: maxTime,
   paused: false,
-  gameOver: false
+  gameOver: false,
+  level: 1
 })
 
 const tick = time => state => {
@@ -287,7 +293,6 @@ const tick = time => state => {
 
   const timeOfLastTick = time
 
-  // TODO: check if game over
   if (!state.tetromino) {
     const tetromino = move(wellCenter)(state.next)
 
