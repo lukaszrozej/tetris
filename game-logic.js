@@ -212,6 +212,19 @@ const checkGameOver = state =>
       gameOver: true
     }
 
+const length = tetromino => {
+  const xCoords = tetromino.squares.map(s => s.x)
+  return Math.max(...xCoords) - Math.min(...xCoords) + 1
+}
+
+const moveToCenter = tetromino => {
+  const vector = {
+    x: (width >> 1) - (length(tetromino) >> 1),
+    y: 0
+  }
+  return move(vector)(tetromino)
+}
+
 const drop = state => {
   if (!state.tetromino || state.paused || state.gameOver) return state
 
@@ -221,11 +234,14 @@ const drop = state => {
   const mountedRows = mount(state.tetromino)(state.rows)
   const clearedRows = clearFullRows(mountedRows)
 
+console.log(tetromino)
+console.log(length(tetromino))
+
   if (clearedRows.length === height) {
     return checkGameOver({
       ...state,
       rows: mountedRows,
-      tetromino: move(wellCenter)(state.next),
+      tetromino: moveToCenter(state.next),
       next: rndTetromino(),
       comboCount: 0
     })
@@ -233,7 +249,7 @@ const drop = state => {
 
   const level = Math.floor(state.linesCount / 10) + 1
   const timeBetweenTicks = level > state.level
-    ? (state.timeBetweenTicks - minTime) * timeFactor
+    ? (state.timeBetweenTicks - minTime) * timeFactor + minTime
     : state.timeBetweenTicks
 
   const currentLinesCount = height - clearedRows.length
@@ -294,7 +310,7 @@ const tick = time => state => {
   const timeOfLastTick = time
 
   if (!state.tetromino) {
-    const tetromino = move(wellCenter)(state.next)
+    const tetromino = moveToCenter(state.next)
 
     return checkGameOver({
       ...state,

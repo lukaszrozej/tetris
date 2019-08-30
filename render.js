@@ -19,7 +19,6 @@ const setPosition = squareElem => p => {
 
 const createSquareElem = (type, id) => {
   const squareElem = document.createElement('div')
-  squareElem.textContent = id
   squareElem.classList.add('square')
   squareElem.classList.add(type)
   squareElems[id] = squareElem
